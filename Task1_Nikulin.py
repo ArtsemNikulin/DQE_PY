@@ -17,4 +17,12 @@ print("""What i need to receive:
 
 sorted_list = [] #I declare variable for sorted list
 
-
+for i in range(100): #I declare loop with 100 iterations
+    min_value = 1000 #I declare variable where I am going to save minimal value. At start it contain MAX value of list.
+    for j in random_list:#In body of first loop I create one more loop to find MIN value in the list
+        if j <= min_value: #this condition I use to find MIN value
+            min_value = j #I assign value from loop's variable to min_value variable
+    random_list.remove(min_value) #I remove found value from unsorted list
+    sorted_list.append(min_value) #I add found MIN value to sorted list
+print("""What I have received: 
+"""+str(sorted_list))
