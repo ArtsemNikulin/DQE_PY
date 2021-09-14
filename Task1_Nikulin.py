@@ -26,3 +26,23 @@ for i in range(100): #I declare loop with 100 iterations
     sorted_list.append(min_value) #I add found MIN value to sorted list
 print("""What I have received: 
 """+str(sorted_list))
+
+#3 - calculate average for even and odd numbers
+
+even_sum = 0 #I declare variable to summarize even values of list
+even_count = 0 #I declare variable to measure count of even values
+odd_sum = 0 #I declare variable to summarize odd values of list
+odd_count = 0 #I declare variable to measure count of odd values
+
+for i in sorted_list: # I declare loop to find even/odd values and to count them
+    if i % 2 == 0: #Condition to find even values
+        even_sum += i #action to summarize even values
+        even_count += 1 #action to summarize count of even values
+    else:
+        odd_sum += i #action to summarize odd values
+        odd_count += 1 #action to summarize count of odd values
+
+#4 - print both average result in console 
+
+print('Average of even values is: ', even_sum/even_count)
+print('Average of odd values is: ', odd_sum/odd_count)
