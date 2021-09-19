@@ -42,7 +42,7 @@ for i in sorted_list: # I declare loop to find even/odd values and to count them
         odd_sum += i #action to summarize odd values
         odd_count += 1 #action to summarize count of odd values
 
-#4 - print both average result in console 
+#4 - print both average result in console.
 
 print('Average of even values is: ', even_sum/even_count)
 print('Average of odd values is: ', odd_sum/odd_count)
