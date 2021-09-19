@@ -1,26 +1,58 @@
 # create a list_of_dicts of random number of dicts (from 2 to 10)
 
-import random
-import string
+import random  # library that I am used for generating counts and size of dictionaries
+import string  # library that I am used for generating keys of dictionaries
 
 list_of_dicts = []
-rand_dict = {}
+random_dict = {}
 dict_for_insert = {}
 
 for i in range(random.randint(2, 10)):  # I create a loop for random count of dictionaries
     for j in range(random.randint(2, 10)):  # I create a loop for random count of key:value inside each dictionary
-        rand_dict[random.choice(string.ascii_lowercase)] = random.randint(0, 100)  # I generate random key and value
-    dict_for_insert = rand_dict.copy()
+        random_dict[random.choice(string.ascii_lowercase)] = random.randint(0, 100)  # I generate random key and value
+    dict_for_insert = random_dict.copy()
     list_of_dicts.append(dict_for_insert)
-    rand_dict.clear()
+    random_dict.clear()
 
-print(list_of_dicts)
+print("""The list filled by random-sized dictionaries is: 
+""", list_of_dicts)
 
-# get previously generated list of dicts and create one common dict:
-common_dict = {}
+# get previously generated list of dicts and create one common dictionary
+
+final_dict = {}  # variable for final dictionary
+common_dict = {}  # variable for dictionary without renaming
+entry = {}  # variable for saving entries for each key
+index = 0
+
+for each_dict in list_of_dicts:  # I read each dictionary in list
+    for key in each_dict.keys():  # I read keys of each dictionary
+        if key not in common_dict:  # I check that key presenting
+            common_dict[key] = list_of_dicts[index][key]
+            entry[key] = 1
+        else:
+            entry[key] += 1
+            if common_dict[key] < each_dict[key]:
+                common_dict[key] = list_of_dicts[index][key]
+    index += 1
+
+print("""Dictionary with max values for each key is:
+""", common_dict)
+
+for i in common_dict:  # I create a loop to change keys that appeared more than 1 time:
+    if entry.get(i) > 1:
+        final_dict[str(i) + '_' + str(entry.get(i))] = common_dict.get(i)
+    else:
+        final_dict[i] = common_dict.get(i)
+print("""The final dictionary is:
+""", final_dict)
+
+# additional way, but without name changing
+
+dictionary = {}
 
 for each_dict in list_of_dicts:  # I create a loop to read each dictionary
     for key, value in each_dict.items():  # I create a loop to read each key:value
-        common_dict[key] = max(value,
-                               common_dict.get(key, value))  # I use max function to choose max value for each key
-print(common_dict)
+        dictionary[key] = max(value, dictionary.get(key, value))  # I use function to choose max value for each key
+
+print("""Dictionary without name changing is: 
+""", dictionary)
