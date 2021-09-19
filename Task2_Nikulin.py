@@ -19,7 +19,8 @@ print(list_of_dicts)
 # get previously generated list of dicts and create one common dict:
 common_dict = {}
 
-for each_dict in list_of_dicts:
-    for key, value in each_dict.items():
-        common_dict[key] = max(value, common_dict.get(key, value))
+for each_dict in list_of_dicts:  # I create a loop to read each dictionary
+    for key, value in each_dict.items():  # I create a loop to read each key:value
+        common_dict[key] = max(value,
+                               common_dict.get(key, value))  # I use max function to choose max value for each key
 print(common_dict)
