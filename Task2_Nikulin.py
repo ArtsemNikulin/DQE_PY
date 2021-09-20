@@ -46,13 +46,28 @@ for i in common_dict:  # I create a loop to change keys that appeared more than 
 print("""The final dictionary is:
 """, final_dict)
 
-# additional way, but without name changing
+# additional way
 
+entry2 = {}
 dictionary = {}
+last_dictionary = {}
 
-for each_dict in list_of_dicts:  # I create a loop to read each dictionary
-    for key, value in each_dict.items():  # I create a loop to read each key:value
-        dictionary[key] = max(value, dictionary.get(key, value))  # I use function to choose max value for each key
+for each_dict in list_of_dicts:  # I read each dictionary in list
+    for key,value in each_dict.items():  # I read keys of each dictionary
+        if key not in dictionary:  # I check that key presenting
+            dictionary[key] = max(value, dictionary.get(key, value))
+            entry2[key] = 1
+        else:
+            dictionary[key] = max(value, dictionary.get(key, value))
+            entry2[key] += 1
 
 print("""Dictionary without name changing is: 
 """, dictionary)
+for i in dictionary:
+    if entry2.get(i) > 1:
+        last_dictionary[str(i) + '_' + str(entry2.get(i))] = dictionary.get(i)
+    else:
+        last_dictionary[i] = dictionary.get(i)
+
+print("""Final dict is: 
+""", last_dictionary)
