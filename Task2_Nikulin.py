@@ -8,7 +8,7 @@ random_dict = {}
 dict_for_insert = {}
 
 for i in range(random.randint(2, 10)):  # I create a loop for random count of dictionaries
-    for j in range(random.randint(2, 10)):  # I create a loop for random count of key:value inside each dictionary
+    for j in range(random.randint(1, 26)):  # I create a loop for random count of key:value inside each dictionary
         random_dict[random.choice(string.ascii_lowercase)] = random.randint(0, 100)  # I generate random key and value
     dict_for_insert = random_dict.copy()
     list_of_dicts.append(dict_for_insert)
