@@ -18,26 +18,21 @@ print("""The list filled by random-sized dictionaries is:
 """, list_of_dicts)
 
 # get previously generated list of dicts and create one common dictionary
-
 final_dict = {}  # variable for final dictionary
 common_dict = {}  # variable for dictionary without renaming
 entry = {}  # variable for saving entries for each key
-index = 0
 
-for each_dict in list_of_dicts:  # I read each dictionary in list
+for index, each_dict in enumerate(list_of_dicts):  # I read each dictionary in list
     for key in each_dict.keys():  # I read keys of each dictionary
         if key not in common_dict:  # I check that key presenting
-            common_dict[key] = list_of_dicts[index][key]
+            common_dict[key] = each_dict[key]
             entry[key] = 1
-        else:
-            entry[key] += 1
-            if common_dict[key] < each_dict[key]:
-                common_dict[key] = list_of_dicts[index][key]
-    index += 1
+        elif common_dict[key] < each_dict[key]:
+            entry[key] = index + 1
+            common_dict[key] = each_dict[key]
 
 print("""Dictionary with max values for each key is:
 """, common_dict)
-
 for i in common_dict:  # I create a loop to change keys that appeared more than 1 time:
     if entry.get(i) > 1:
         final_dict[str(i) + '_' + str(entry.get(i))] = common_dict.get(i)
@@ -52,22 +47,22 @@ entry2 = {}
 dictionary = {}
 last_dictionary = {}
 
-for each_dict in list_of_dicts:  # I read each dictionary in list
+for index, each_dict in enumerate(list_of_dicts):
     for key,value in each_dict.items():  # I read keys of each dictionary
         if key not in dictionary:  # I check that key presenting
             dictionary[key] = max(value, dictionary.get(key, value))
             entry2[key] = 1
-        else:
+        elif key in dictionary and dictionary[key] < each_dict[key]:
+            entry2[key] = index
             dictionary[key] = max(value, dictionary.get(key, value))
-            entry2[key] += 1
 
-print("""Dictionary without name changing is: 
+print("""Dictionary without name changing is:
 """, dictionary)
 for i in dictionary:
-    if entry2.get(i) > 1:
-        last_dictionary[str(i) + '_' + str(entry2.get(i))] = dictionary.get(i)
+    if entry2.get(i) >1:
+        last_dictionary[str(i) + '_' + str(entry2.get(i)+1)] = dictionary.get(i)
     else:
         last_dictionary[i] = dictionary.get(i)
 
-print("""Final dict is: 
+print("""Final dict is:
 """, last_dictionary)
