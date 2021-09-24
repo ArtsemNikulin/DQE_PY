@@ -1,37 +1,37 @@
-#1 - create list of 100 random numbers from 0 to 1000
+#1 - create list_of_text of 100 random numbers from 0 to 1000
 
 import random #I load library to use it in task
 
-random_list = []#I declare variable, where I am going to save a list of 100 random numbers from 0 to 1000
+random_list = []#I declare variable, where I am going to save a list_of_text of 100 random numbers from 0 to 1000
 
-for i in range(100): #I create a loop with 100 of iterations and it will fill the a list.
+for i in range(100): #I create a loop with 100 of iterations and it will fill the a list_of_text.
     random_list.append(random.randint(0, 1000)) #I use append function in body of loop. This function add value for each itteration.
                                                 #Input consists of randomint fucnction that return any value in the range from 1 to 1000.
 print("""What I have: 
 """+str(random_list)) #I print result for checking
 
-#2 - sort list from min to max (without using sort())
+#2 - sort list_of_text from min to max (without using sort())
 
 print("""What i need to receive: 
 """ + str(sorted(random_list)))
 
-sorted_list = [] #I declare variable for sorted list
+sorted_list = [] #I declare variable for sorted list_of_text
 
 for i in range(100): #I declare loop with 100 iterations
-    min_value = 1000 #I declare variable where I am going to save minimal value. At start it contain MAX value of list.
-    for j in random_list:#In body of first loop I create one more loop to find MIN value in the list
+    min_value = 1000 #I declare variable where I am going to save minimal value. At start it contain MAX value of list_of_text.
+    for j in random_list:#In body of first loop I create one more loop to find MIN value in the list_of_text
         if j <= min_value: #this condition I use to find MIN value
             min_value = j #I assign value from loop's variable to min_value variable
-    random_list.remove(min_value) #I remove found value from unsorted list
-    sorted_list.append(min_value) #I add found MIN value to sorted list
+    random_list.remove(min_value) #I remove found value from unsorted list_of_text
+    sorted_list.append(min_value) #I add found MIN value to sorted list_of_text
 print("""What I have received: 
 """+str(sorted_list))
 
 #3 - calculate average for even and odd numbers
 
-even_sum = 0 #I declare variable to summarize even values of list
+even_sum = 0 #I declare variable to summarize even values of list_of_text
 even_count = 0 #I declare variable to measure count of even values
-odd_sum = 0 #I declare variable to summarize odd values of list
+odd_sum = 0 #I declare variable to summarize odd values of list_of_text
 odd_count = 0 #I declare variable to measure count of odd values
 
 for i in sorted_list: # I declare loop to find even/odd values and to count them
