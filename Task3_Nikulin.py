@@ -17,20 +17,21 @@ for i in range(len(text)):
         count += 1
 print(f'Total number of whitespaces in the text is: {count}')
 
-#2 - create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
-last_elements = re.findall(r"\w+(?=[.])", text) # I find last words of each sentence
-sentence_to_add = ' '.join(last_elements) #I join last words in one sentence
+# 2 - create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
+last_elements = re.findall(r"\w+(?=[.])", text)  # I find last words of each sentence
+sentence_to_add = ' '.join(last_elements)  # I join last words in one sentence
 text_with_new_sentence = ""
 
 print(f'\nThis sentence need to add: {sentence_to_add}')
 
-list_of_text = re.split('(^|[.]\s|\n\t)', text) # I create list of text splits
+list_of_text = re.split('(^|[.]\s|\n\t)', text)  # I create list of text splits
 
-for index, i in enumerate(list_of_text): # I create a loop that finds a paragraph which needs to add the sentence
+for index, i in enumerate(list_of_text):  # I create a loop that finds a paragraph which needs to add the sentence
     if i == 'also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph':
         list_of_text[index] = i + '. ' + sentence_to_add
-        for each_split in list_of_text: # I create a loop that create new text
+        for each_split in list_of_text:  # I create a loop that create new text
             text_with_new_sentence = ''.join(list_of_text)
+            text_with_new_sentence = text_with_new_sentence.replace('x“', 'x “')
 
 print(f'\nThis is text with new sentence:\n {text_with_new_sentence}')
 
@@ -38,9 +39,13 @@ print(f'\nThis is text with new sentence:\n {text_with_new_sentence}')
 
 text_with_norm_case = ""
 
-for i in re.split('(^|[.]\s|\n\t)', text_with_new_sentence): # I use regexp to multiple conditions of split
+for i in re.split('(^|[.]\s|\n\t)', text_with_new_sentence):  # I use regexp to multiple conditions of split
     text_with_norm_case += i.capitalize()
 
 print(f'\n Text with normal word case is:\n{text_with_norm_case}')
 
+# 4 - It iz misspelling here. Fix“iz” with correct “is”, but only when it iz a mistake.
 
+final_text = text_with_norm_case.replace(' iz ', ' is ')
+
+print(f'\n Final text is: \n {final_text}')
