@@ -1,3 +1,5 @@
+import random
+import string
 import re
 
 text = """homework:
@@ -62,8 +64,53 @@ def iz_correctness(x=''):
         print(f'\n Final text is: \n {final_text}')
         return final_text
 
+# 5 - function for creating a list with random dicts and random consisting (from 2 to 10)
+
+def list_with_dicts_creating():
+    x = []
+    random_dict = {}
+    dict_for_insert = {}
+    for i in range(random.randint(2, 10)):
+        for j in range(random.randint(1, 26)):
+            random_dict[random.choice(string.ascii_lowercase)] = random.randint(0, 100)
+        dict_for_insert = random_dict.copy()
+        x.append(dict_for_insert)
+        random_dict.clear()
+
+    print("""The list_of_text filled by random-sized dictionaries is: 
+""", x)
+    return x
+
+# 6 - function for creating one common dictionary
+
+def dict_from_list_of_dicts(x):
+    if type(x) == list:
+        global final_dict
+        final_dict = {}
+        common_dict = {}
+        entry = {}
+        for index, each_dict in enumerate(x):  # I read each dictionary in list_of_text
+            for key in each_dict.keys():  # I read keys of each dictionary
+                if key not in common_dict:  # I check that key presenting
+                    common_dict[key] = each_dict[key]
+                    entry[key] = 1
+                elif common_dict[key] < each_dict[key]:
+                    entry[key] = index + 1
+                    common_dict[key] = each_dict[key]
+        for i in common_dict:  # I create a loop to change keys that appeared more than 1 time:
+            if entry.get(i) > 1:
+                final_dict[str(i) + '_' + str(entry.get(i))] = common_dict.get(i)
+            else:
+                final_dict[i] = common_dict.get(i)
+        print("""The final dictionary is:
+""", final_dict)
+    else:
+        print('Enter DICT as argument')
+    return final_dict
 
 count_of_whitespaces_in_str(text)
 add_sentence_to_paragraph(text)
 normalize_text(text_with_new_sentence)
 iz_correctness(text_with_norm_case)
+x = list_with_dicts_creating()
+dict_from_list_of_dicts(x)
