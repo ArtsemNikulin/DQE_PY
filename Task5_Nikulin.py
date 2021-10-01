@@ -91,4 +91,3 @@ while start != 1:
     elif b != '1' or b != '2' or b != '3':
         print('You need to enter a digit only between 1 or 3')
         b = a.type_choose()
-
