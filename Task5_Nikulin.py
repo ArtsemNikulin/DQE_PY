@@ -1,94 +1,79 @@
 import datetime
 
+start = ''
 date = datetime.datetime.now()
 
 
-class Choose:
-    def type_choose(self):
-        self.type_of_news = input(f"""Hello, choose type of news, please (Enter digit):
-        1 - News
-        2 - Private Ad
-        3 - Hello_message
-""")
-        return self.type_of_news
+class Publication:
+    def __init__(self):
+        self.type_of_publication = type_of_publication
+        self.text_of_publication = input(f'Enter text of publication:\n')
 
 
-class AddContent:
-    def add_news(self):
-        self.text_of_news = input('Enter text of news:\n')
-        self.my_file = open("News.txt", "a")
-        self.my_file.write(f"\nNews --------------\n{self.text_of_news}\n")
-        self.my_file.close()
+class News(Publication):
+    def __init__(self):
+        super().__init__()
         self.city = input('Enter city of news:\n')
-        self.my_file = open("News.txt", "a")
-        self.my_file.write(f"{self.city}, {date.day}/{date.month}/{date.year} {date.hour}.{date.minute}\n")
-        self.my_file.close()
 
-    def add_ad(self):
-        self.text_of_news = input('Enter text of Private Ad:\n')
-        self.my_file = open("News.txt", "a")
-        self.my_file.write(f"\nPrivate Ad --------------\n{self.text_of_news}\n")
-        self.my_file.close()
-        self.user_date = GetDate()
-        self.user_date_input = self.user_date.get_date()
-        self.actual_until = self.user_date.difference_between_dates()
-        self.my_file = open("News.txt", "a")
-        self.my_file.write(f"Actual until: {self.user_date_input.day}/{self.user_date_input.month}/{self.user_date_input.year}, {self.actual_until} days left\n")
-        self.my_file.close()
+    def write_to_file(self, target_of_writing="News.txt"):
+        target_of_writing = open(target_of_writing, "a")
+        target_of_writing.write(f"\nNews------------------\n{self.text_of_publication}\n"
+                                f"{self.city},{date.day}/{date.month}/{date.year} {date.hour}.{date.minute}\n")
+        target_of_writing.close()
 
-    def hello_message(self):
-        self.user_name = input("Enter yor name:\n")
+
+class Ads(Publication):
+    def __init__(self):
+        super().__init__()
+        actual_year = int(input('Enter a year till that AD will be actual\n'))
+        actual_month = int(input('Enter a month till that AD will be actual\n'))
+        actual_day = int(input('Enter a day of chose month till that AD will be actual\n'))
+        actual_date = datetime.date(actual_year, actual_month, actual_day)
+        self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.day}"
+        self.days_until = (actual_date - date.date()).days
+
+    def write_to_file(self, target_of_writing="News.txt"):
+        target_of_writing = open(target_of_writing, "a")
+        target_of_writing.write(f"\nPrivate Ad------------"
+                                f"\n{self.text_of_publication}"
+                                f"\nActual until: {self.ads_actual_date}, {self.days_until} days left")
+        target_of_writing.close()
+
+
+class HelloMessage(Publication):
+    def __init__(self):
+        self.user_name = input("Enter your name:\n")
         self.receiver = input("Enter a name of message receiver:\n")
-        self.message_text = input("Enter a text:\n")
-        self.my_file = open("News.txt", "a")
-        self.my_file.write(f"\nHello message --------------\n")
-        self.my_file.write(f"\nFrom {self.user_name} TO {self.receiver}")
-        self.my_file.write(f"\n{self.message_text}")
-        self.my_file.write(f"\n{date.day}/{date.month}/{date.year}")
-        self.my_file.close()
+        super().__init__()
+
+    def write_to_file(self, target_of_writing="News.txt"):
+        target_of_writing = open(target_of_writing, "a")
+        target_of_writing.write(f"\nHello message---------"
+                                f"\nFrom {self.user_name} TO {self.receiver}"
+                                f"\n{self.text_of_publication}")
+        target_of_writing.close()
 
 
-class GetDate:
-    def get_date(self):
-        self.year = int(input('Enter a year till that AD will be actual\n'))
-        self.month = int(input('Enter a month till that AD will be actual\n'))
-        self.day = int(input('Enter a day of chose month till that AD will be actual\n'))
-        self.valid_date = datetime.date(self.year, self.month, self.day)
-        return self.valid_date
+while start != '1':
+    type_of_publication = input(f"""Hello, choose type of news, please (Enter digit):
+                            1 - News
+                            2 - Private Ad
+                            3 - Hello_message
+""")
+    if type_of_publication == '1':
+        new_news = News()
+        new_news.write_to_file()
 
-    def difference_between_dates(self):
-        self.difference = (self.valid_date - date.date()).days
-        return self.difference
+    elif type_of_publication == '2':
+        new_hello_mesage = Ads()
+        new_hello_mesage.write_to_file()
 
+    elif type_of_publication == '3':
+        new_hello_mesage = HelloMessage()
+        new_hello_mesage.write_to_file()
 
-start = ''
-a = Choose()
-b = a.type_choose()
-c = AddContent()
+    elif type_of_publication != '1' or type_of_publication != '2' or type_of_publication != '3':
+        print('Enter digit from 1 to 3')
+        type_of_publication
 
-while start != 1:
-    if b == '1':
-        c.add_news()
-        start = input("Do you want to proceed? (Enter - Yes; '1' - No):\n")
-        if start != '1':
-            b = a.type_choose()
-        else:
-            break
-    elif b == '2':
-        c.add_ad()
-        start = input("Do you want to proceed? (Enter - Yes; '1' - No):\n")
-        if start != '1':
-            b = a.type_choose()
-        else:
-            break
-    elif b == '3':
-        c.hello_message()
-        start = input("Do you want to proceed? (Enter - Yes; '1' - No):\n")
-        if start != '1':
-            b = a.type_choose()
-        else:
-            break
-    elif b != '1' or b != '2' or b != '3':
-        print('You need to enter a digit only between 1 or 3')
-        b = a.type_choose()
-
+#
