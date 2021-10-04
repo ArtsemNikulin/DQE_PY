@@ -108,7 +108,7 @@ marker_for_past = 'end of this paragraph'
 
 count_of_whitespaces_in_str(text)
 add_sentence_to_paragraph(text)
-normalize_text(text)
-iz_correctness(text)
+text_with_norm_case = normalize_text(text)
+iz_correctness(text_with_norm_case)
 list_with_rnd_dicts = list_with_dicts_creating()
 dict_from_list_of_dicts(list_with_rnd_dicts)
