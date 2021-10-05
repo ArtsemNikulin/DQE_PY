@@ -10,7 +10,7 @@ def count_of_whitespaces_in_str(str_for_input=''):
     if str_for_input == '':
         print("Enter string into function in format 'string'")
     else:
-        count = len(re.findall("'\\s", str_for_input))
+        count = len(re.findall("\\s", str_for_input))
         print(f'Total number of whitespaces in the text is: {count}')
         return count
 
