@@ -4,7 +4,7 @@ import sys
 
 class Publication:
     def __init__(self):
-        self.publication_date = datetime.datetime.now()
+        self.date = datetime.datetime.now()
         self.type_of_publication = type_of_publication
         self.text_of_publication = input(f'Enter text of publication:\n')
 
@@ -15,9 +15,10 @@ class News(Publication):
         self.city = input('Enter city of news:\n')
 
     def write_to_file(self, target_of_writing="News.txt"):
+        news_publ_date = f"{self.city},{self.date.day}/{self.date.month}/{self.date.year} {self.date.hour}.{self.date.minute}\n"
         target_of_writing = open(target_of_writing, "a")
         target_of_writing.write(f"\nNews------------------\n{self.text_of_publication}\n"
-                                f"{self.city},{self.publication_date.day}/{self.publication_date.month}/{self.publication_date.year} {self.publication_date.hour}.{self.publication_date.minute}\n")
+                                f"{news_publ_date}")
         target_of_writing.close()
 
 
@@ -29,7 +30,7 @@ class Ads(Publication):
         actual_day = int(input('Enter a day of chose month till that AD will be actual\n'))
         actual_date = datetime.date(actual_year, actual_month, actual_day)
         self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.day}"
-        self.days_until = (actual_date - self.publication_date.date()).days
+        self.days_until = (actual_date - self.date.date()).days
 
     def write_to_file(self, target_of_writing="News.txt"):
         target_of_writing = open(target_of_writing, "a")
@@ -77,6 +78,4 @@ while True:
 
     else:
         print('Enter digit from 1 to 3 or 4 for Exit')
-        type_of_publication
-
-
+        choose_type = type_of_publication
