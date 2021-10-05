@@ -1,11 +1,10 @@
 import datetime
-
-start = ''
-date = datetime.datetime.now()
+import sys
 
 
 class Publication:
     def __init__(self):
+        self.publication_date = datetime.datetime.now()
         self.type_of_publication = type_of_publication
         self.text_of_publication = input(f'Enter text of publication:\n')
 
@@ -18,7 +17,7 @@ class News(Publication):
     def write_to_file(self, target_of_writing="News.txt"):
         target_of_writing = open(target_of_writing, "a")
         target_of_writing.write(f"\nNews------------------\n{self.text_of_publication}\n"
-                                f"{self.city},{date.day}/{date.month}/{date.year} {date.hour}.{date.minute}\n")
+                                f"{self.city},{self.publication_date.day}/{self.publication_date.month}/{self.publication_date.year} {self.publication_date.hour}.{self.publication_date.minute}\n")
         target_of_writing.close()
 
 
@@ -30,7 +29,7 @@ class Ads(Publication):
         actual_day = int(input('Enter a day of chose month till that AD will be actual\n'))
         actual_date = datetime.date(actual_year, actual_month, actual_day)
         self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.day}"
-        self.days_until = (actual_date - date.date()).days
+        self.days_until = (actual_date - self.publication_date.date()).days
 
     def write_to_file(self, target_of_writing="News.txt"):
         target_of_writing = open(target_of_writing, "a")
@@ -54,11 +53,12 @@ class HelloMessage(Publication):
         target_of_writing.close()
 
 
-while start != '1':
-    type_of_publication = input(f"""Hello, choose type of news, please (Enter digit):
+while True:
+    type_of_publication = input(f"""Hello, choose type of news or exit, please (Enter digit):
                             1 - News
                             2 - Private Ad
                             3 - Hello_message
+                            4 - Exit
 """)
     if type_of_publication == '1':
         new_news = News()
@@ -72,8 +72,11 @@ while start != '1':
         new_hello_mesage = HelloMessage()
         new_hello_mesage.write_to_file()
 
-    elif type_of_publication != '1' or type_of_publication != '2' or type_of_publication != '3':
-        print('Enter digit from 1 to 3')
+    elif type_of_publication == '4':
+        sys.exit()
+
+    else:
+        print('Enter digit from 1 to 3 or 4 for Exit')
         type_of_publication
 
-#
+
