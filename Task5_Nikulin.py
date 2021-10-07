@@ -2,10 +2,20 @@ import datetime
 import sys
 
 
+class Choose:
+    def __init__(self):
+        self.type_of_publication = input(f"""Hello, choose type of news or exit, please (Enter digit):
+                            1 - News
+                            2 - Private Ad
+                            3 - Hello_message
+                            4 - Exit
+""")
+
+
 class Publication:
     def __init__(self):
         self.date = datetime.datetime.now()
-        self.type_of_publication = type_of_publication
+
         self.text_of_publication = input(f'Enter text of publication:\n')
 
 
@@ -15,10 +25,11 @@ class News(Publication):
         self.city = input('Enter city of news:\n')
 
     def write_to_file(self, target_of_writing="News.txt"):
-        news_publ_date = f"{self.city},{self.date.day}/{self.date.month}/{self.date.year} {self.date.hour}.{self.date.minute}\n"
+        news_publ_date = f"{self.city}, {self.date.strftime('%d/%m/%y %I.%M')}"
         target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"\nNews------------------\n{self.text_of_publication}\n"
-                                f"{news_publ_date}")
+        target_of_writing.write(f"News------------------\n"
+                                f"{self.text_of_publication}\n"
+                                f"{news_publ_date}\n\n")
         target_of_writing.close()
 
 
@@ -29,14 +40,14 @@ class Ads(Publication):
         actual_month = int(input('Enter a month till that AD will be actual\n'))
         actual_day = int(input('Enter a day of chose month till that AD will be actual\n'))
         actual_date = datetime.date(actual_year, actual_month, actual_day)
-        self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.day}"
+        self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.year}"
         self.days_until = (actual_date - self.date.date()).days
 
     def write_to_file(self, target_of_writing="News.txt"):
         target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"\nPrivate Ad------------"
-                                f"\n{self.text_of_publication}"
-                                f"\nActual until: {self.ads_actual_date}, {self.days_until} days left")
+        target_of_writing.write(f"Private Ad------------\n"
+                                f"{self.text_of_publication}\n"
+                                f"Actual until: {self.ads_actual_date}, {self.days_until} days left\n\n")
         target_of_writing.close()
 
 
@@ -48,34 +59,30 @@ class HelloMessage(Publication):
 
     def write_to_file(self, target_of_writing="News.txt"):
         target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"\nHello message---------"
-                                f"\nFrom {self.user_name} TO {self.receiver}"
-                                f"\n{self.text_of_publication}")
+        target_of_writing.write(f"Hello message---------\n"
+                                f"From {self.user_name} TO {self.receiver}\n"
+                                f"{self.text_of_publication}\n\n")
         target_of_writing.close()
 
 
 while True:
-    type_of_publication = input(f"""Hello, choose type of news or exit, please (Enter digit):
-                            1 - News
-                            2 - Private Ad
-                            3 - Hello_message
-                            4 - Exit
-""")
-    if type_of_publication == '1':
+    a = Choose()
+
+    if a.type_of_publication == '1':
         new_news = News()
         new_news.write_to_file()
 
-    elif type_of_publication == '2':
+    elif a.type_of_publication == '2':
         new_hello_mesage = Ads()
         new_hello_mesage.write_to_file()
 
-    elif type_of_publication == '3':
+    elif a.type_of_publication == '3':
         new_hello_mesage = HelloMessage()
         new_hello_mesage.write_to_file()
 
-    elif type_of_publication == '4':
+    elif a.type_of_publication == '4':
         sys.exit()
 
     else:
         print('Enter digit from 1 to 3 or 4 for Exit')
-        choose_type = type_of_publication
+        choose_type = Choose()
