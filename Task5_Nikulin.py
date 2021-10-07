@@ -66,21 +66,21 @@ class HelloMessage(Publication):
 
 
 while True:
-    a = Choose()
+    choose_type = Choose()
 
-    if a.type_of_publication == '1':
+    if choose_type.type_of_publication == '1':
         new_news = News()
         new_news.write_to_file()
 
-    elif a.type_of_publication == '2':
+    elif choose_type.type_of_publication == '2':
         new_hello_mesage = Ads()
         new_hello_mesage.write_to_file()
 
-    elif a.type_of_publication == '3':
+    elif choose_type.type_of_publication == '3':
         new_hello_mesage = HelloMessage()
         new_hello_mesage.write_to_file()
 
-    elif a.type_of_publication == '4':
+    elif choose_type.type_of_publication == '4':
         sys.exit()
 
     else:
