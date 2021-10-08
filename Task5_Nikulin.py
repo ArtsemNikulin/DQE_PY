@@ -73,8 +73,8 @@ while True:
         new_news.write_to_file()
 
     elif choose_type.type_of_publication == '2':
-        new_hello_mesage = Ads()
-        new_hello_mesage.write_to_file()
+        new_ads = Ads()
+        new_ads.write_to_file()
 
     elif choose_type.type_of_publication == '3':
         new_hello_mesage = HelloMessage()
