@@ -113,3 +113,5 @@ if __name__ == '__main__':
     text_with_iz_correctness = iz_correctness(text_with_norm_case)
     list_with_rnd_dicts = list_with_dicts_creating()
     common_dict = dict_from_list_of_dicts(list_with_rnd_dicts)
+
+
