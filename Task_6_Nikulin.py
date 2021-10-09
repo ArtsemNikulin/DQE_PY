@@ -2,7 +2,7 @@ import datetime
 import sys
 import re
 import os
-import Task4_Nikulin
+import Task4_Nikulin as
 
 Task4_Nikulin.normalize_text()
 
