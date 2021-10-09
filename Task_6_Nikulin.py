@@ -51,6 +51,7 @@ class Choose:
 
 class Publication:
     def __init__(self):
+        self.content = ''
         self.date = datetime.datetime.now()
         self.text_of_publication = normalize_text(input(f'Enter text of publication:\n'))
 
