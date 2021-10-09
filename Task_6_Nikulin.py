@@ -2,9 +2,7 @@ import datetime
 import sys
 import re
 import os
-import Task4_Nikulin as
-
-Task4_Nikulin.normalize_text()
+from Task4_Nikulin import normalize_text
 
 
 class Choose:
@@ -26,53 +24,47 @@ class Choose:
                             1 - Default Folder
                             2 - User folder
 """)
+            self.count_of_publications = int(input('Input count of publ from file '))
+            if self.folder_choose == '1':
+                self.file_path = sys.path[1]
+            elif self.folder_choose == '2':
+                self.file_path = input(r"Enter path to file (in format C:\) ")
             self.source_file_name = input('Enter your file name\n')
+
         elif self.input_type == '3':
             sys.exit()
 
     def read_from_file(self):
-        if self.folder_choose == '1':
-            self.source_file_path = os.path.join(sys.path[1], self.source_file_name)
-            self.source_file = open(self.source_file_name).read()
-            self.text_from_file = re.split('(^|\\s)', self.source_file)
-            return self.text_from_file
-        elif self.folder_choose == '2':
-            source_path = input(r"Enter path to file (in format C:\) ")
-            self.source_file_path = os.path.join(source_path, self.source_file_name)
-            self.source_file = open(self.source_file_path).read()
-            self.text_from_file = re.split('(^|\\s)', self.source_file)
-            return self.text_from_file
+        self.source_file_path = os.path.join(self.file_path, self.source_file_name)
+        self.source_file = open(self.source_file_path, 'r').read()
+        self.text_from_file = re.split("\\n\\n", self.source_file)
+        return self.text_from_file
 
     def write_from_file(self, target_of_writing="News.txt"):
-        write_compelte = 0
-        target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write('\n')
-        for i in self.text_from_file:
-            target_of_writing.write(i)
-            write_compelte += 1
-        target_of_writing.close()
-        if write_compelte > 0:
+        with open(target_of_writing, "a") as file:
+            if self.count_of_publications > 0:
+                for i in self.text_from_file:
+                    if self.text_from_file.index(i) < self.count_of_publications:
+                        file.write(i + '\n\n')
             os.remove(self.source_file_path)
 
 
 class Publication:
     def __init__(self):
         self.date = datetime.datetime.now()
-        self.text_of_publication = input(f'Enter text of publication:\n')
+        self.text_of_publication = normalize_text(input(f'Enter text of publication:\n'))
+
+    def write_to_file(self, target_of_writing="News.txt"):
+        with open(target_of_writing, "a") as news_feed:
+            news_feed.write(self.content)
 
 
 class News(Publication):
     def __init__(self):
         super().__init__()
-        self.city = input('Enter city of news:\n')
-
-    def write_to_file(self, target_of_writing="News.txt"):
-        news_publ_date = f"{self.city}, {self.date.strftime('%d/%m/%y %I.%M')}"
-        target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"News------------------\n"
-                                f"{self.text_of_publication}\n"
-                                f"{news_publ_date}\n\n")
-        target_of_writing.close()
+        self.city = normalize_text(input('Enter city of news:\n'))
+        news_publ_date = f"{self.city}, {self.date.strftime('%d/%m/%Y %I.%M')}"
+        self.content = f"News------------------\n{self.text_of_publication}\n{news_publ_date}\n\n"
 
 
 class Ads(Publication):
@@ -84,45 +76,29 @@ class Ads(Publication):
         actual_date = datetime.date(actual_year, actual_month, actual_day)
         self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.year}"
         self.days_until = (actual_date - self.date.date()).days
-
-    def write_to_file(self, target_of_writing="News.txt"):
-        target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"Private Ad------------\n"
-                                f"{self.text_of_publication}\n"
-                                f"Actual until: {self.ads_actual_date}, {self.days_until} days left\n")
-        target_of_writing.close()
+        self.content = f"Private Ad------------\n{self.text_of_publication}\nActual until:" \
+                       f"{self.ads_actual_date}, {self.days_until} days left\n\n"
 
 
 class HelloMessage(Publication):
     def __init__(self):
-        self.user_name = input("Enter your name:\n")
-        self.receiver = input("Enter a name of message receiver:\n")
+        self.user_name = normalize_text(input("Enter your name:\n"))
+        self.receiver = normalize_text(input("Enter a name of message receiver:\n"))
         super().__init__()
-
-    def write_to_file(self, target_of_writing="News.txt"):
-        target_of_writing = open(target_of_writing, "a")
-        target_of_writing.write(f"Hello message---------"
-                                f"From {self.user_name} TO {self.receiver}"
-                                f"{self.text_of_publication}\n")
-        target_of_writing.close()
+        self.content = f"Hello message---------\nFrom {self.user_name} TO {self.receiver}\n" \
+                       f"{self.text_of_publication}\n\n"
 
 
 while True:
     user_choose = Choose()
     if user_choose.input_type == '1':
         if user_choose.type_of_publication == '1':
-            new_news = News()
-            new_news.write_to_file()
+            News().write_to_file()
         elif user_choose.type_of_publication == '2':
             new_ads = Ads()
             new_ads.write_to_file()
         elif user_choose.type_of_publication == '3':
-            new_hello_mesage = HelloMessage()
-            new_hello_mesage.write_to_file()
+            HelloMessage().write_to_file()
     elif user_choose.input_type == '2':
-        if user_choose.folder_choose == '1':
-            user_choose.read_from_file()
-            user_choose.write_from_file()
-        elif user_choose.folder_choose == '2':
-            user_choose.read_from_file()
-            user_choose.write_from_file()
+        user_choose.read_from_file()
+        user_choose.write_from_file()
