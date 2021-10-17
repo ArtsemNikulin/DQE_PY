@@ -35,6 +35,12 @@ class Choose:
         elif self.input_type == '3':
             sys.exit()
 
+        self.headers_for_common_stat_csv = ['letter', 'count_all', 'count_uppercase', 'percentage']
+        self.dict_for_word_csv = {}
+        self.dict_for_common_csv = {}
+        self.csv_name_for_word_count = 'word_count.csv'
+        self.csv_name_for_common_stats = 'common_stats.csv'
+
     def read_from_file(self):
         self.source_file_path = os.path.join(self.file_path, self.source_file_name)
         self.source_file = open(self.source_file_path, 'r').read()
@@ -49,12 +55,44 @@ class Choose:
                         file.write(word + '\n\n')
             os.remove(self.source_file_path)
 
+    def words_csv_write(self, target_of_writing="News.txt"):
+        with open(target_of_writing, "r") as news_feed:
+            read_news_feed = re.split("\\d[\\d\\W]|[^\\w']", news_feed.read())
+            removed_value = ''
+            list_of_words_from_news_feed = [char for char in read_news_feed if char != removed_value]
+            for word in list_of_words_from_news_feed:
+                if word.lower() in self.dict_for_word_csv:
+                    self.dict_for_word_csv[word.lower()] = self.dict_for_word_csv[word.lower()] + 1
+                elif word not in self.dict_for_word_csv:
+                    self.dict_for_word_csv[word.lower()] = 1
+
+        with open(self.csv_name_for_word_count, 'w', newline='') as csv_one:
+            writer = csv.writer(csv_one, delimiter='-')
+            for key, value in self.dict_for_word_csv.items():
+                writer.writerow([key, value])
+
+    def common_stat_csv_write(self, target_of_writing="News.txt"):
+        with open(target_of_writing, "r") as news_feed:
+            read_news_feed_stat = re.findall("[a-zA-z]", news_feed.read())
+
+        with open(self.csv_name_for_common_stats, 'w', newline='') as csv_two:
+            writer = csv.DictWriter(csv_two, fieldnames=self.headers_for_common_stat_csv)
+            writer.writeheader()
+            checks = []
+            for i in read_news_feed_stat:
+                if i.lower() not in checks:
+                    self.dict_for_common_csv['letter'] = i.lower()
+                    count = read_news_feed_stat.count(i.upper()) + read_news_feed_stat.count(i.lower())
+                    self.dict_for_common_csv['count_all'] = count
+                    self.dict_for_common_csv['count_uppercase'] = read_news_feed_stat.count(i.upper())
+                    percentage = self.dict_for_common_csv['count_all'] * 100 / len(read_news_feed_stat)
+                    self.dict_for_common_csv['percentage'] = "{0:.2f}".format(percentage)
+                    writer.writerow(self.dict_for_common_csv)
+                    checks.append(i.lower())
+
 
 class Publication:
     def __init__(self):
-        self.dict_for_csv = {}
-        self.csv_name_for_word_count = 'word_count.csv'
-        self.csv_name_for_common_stats = 'common_stats.csv'
         self.content = ''
         self.date = datetime.datetime.now()
         self.text_of_publication = normalize_text(input(f'Enter text of publication:\n'))
@@ -62,41 +100,6 @@ class Publication:
     def write_to_file(self, target_of_writing="News.txt"):
         with open(target_of_writing, "a") as news_feed:
             news_feed.write(self.content)
-
-        with open(target_of_writing, "r") as news_feed:
-            read_news_feed = re.split("\\d[\\d\\W]|[^\\w']", news_feed.read())
-            removed_value = ''
-            list_of_words_from_news_feed = [char for char in read_news_feed if char != removed_value]
-            for word in list_of_words_from_news_feed:
-                if word.lower() in self.dict_for_csv:
-                    self.dict_for_csv[word.lower()] = self.dict_for_csv[word.lower()] + 1
-                elif word not in self.dict_for_csv:
-                    self.dict_for_csv[word.lower()] = 1
-
-        with open(self.csv_name_for_word_count, 'w', newline='') as csv_one:
-            writer = csv.writer(csv_one, delimiter='-')
-            for key, value in self.dict_for_csv.items():
-                writer.writerow([key, value])
-
-        with open(target_of_writing, "r") as news_feed:
-            read_news_feed_stat = re.findall("[a-zA-z]", news_feed.read())
-
-        with open(self.csv_name_for_common_stats, 'w', newline='') as csv_two:
-            headers = ['letter', 'count_all', 'count_uppercase', 'percentage']
-            writer = csv.DictWriter(csv_two, fieldnames=headers)
-            writer.writeheader()
-            checks = []
-            dict_for_insert = {}
-            for i in read_news_feed_stat:
-                if i.lower() not in checks:
-                    dict_for_insert['letter'] = i.lower()
-                    count = read_news_feed_stat.count(i.upper()) + read_news_feed_stat.count(i.lower())
-                    dict_for_insert['count_all'] = count
-                    dict_for_insert['count_uppercase'] = read_news_feed_stat.count(i.upper())
-                    percentage = dict_for_insert['count_all'] * 100 / len(read_news_feed)
-                    dict_for_insert['percentage'] = "{0:.2f}".format(percentage)
-                    writer.writerow(dict_for_insert)
-                    checks.append(i.lower())
 
 
 class News(Publication):
@@ -134,10 +137,18 @@ while True:
     if user_choose.input_type == '1':
         if user_choose.type_of_publication == '1':
             News().write_to_file()
+            user_choose.words_csv_write()
+            user_choose.common_stat_csv_write()
         elif user_choose.type_of_publication == '2':
             Ads().write_to_file()
+            user_choose.words_csv_write()
+            user_choose.common_stat_csv_write()
         elif user_choose.type_of_publication == '3':
             HelloMessage().write_to_file()
+            user_choose.words_csv_write()
+            user_choose.common_stat_csv_write()
     elif user_choose.input_type == '2':
         user_choose.read_from_file()
         user_choose.write_from_file()
+        user_choose.words_csv_write()
+        user_choose.common_stat_csv_write()
