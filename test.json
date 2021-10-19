@@ -1,0 +1,26 @@
+[{
+  "type": "news",
+  "text": "text",
+  "city": "grodno",
+  "actual_date": null,
+  "user_name": null,
+  "receiver_name": null
+},
+  {
+  "type": "ad",
+  "text": "text",
+  "city": null,
+  "actual_date": "10/10/2021",
+  "user_name": null,
+  "receiver_name": null
+},
+  {
+  "type": "hello",
+  "text": "text",
+  "city": null,
+  "actual_date": null,
+  "user_name": "art",
+  "receiver_name": "nasty"
+}
+]
+
