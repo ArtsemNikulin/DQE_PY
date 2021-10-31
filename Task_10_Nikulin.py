@@ -8,7 +8,7 @@ import xml.etree.ElementTree as Et
 import pyodbc
 from Task4_Nikulin import normalize_text
 
-date = datetime.datetime.now()
+date = datetime.datetime
 
 
 class Choose:
@@ -47,11 +47,6 @@ class Choose:
             sys.exit()
 
         self.content = ''
-        self.headers_for_common_stat_csv = ['letter', 'count_all', 'count_uppercase', 'percentage']
-        self.dict_for_word_csv = {}
-        self.dict_for_common_csv = {}
-        self.csv_name_for_word_count = 'word_count.csv'
-        self.csv_name_for_common_stats = 'common_stats.csv'
 
     def read_from_txt_file(self):
         self.source_file = open(self.source_file_path, 'r').read()
@@ -72,30 +67,29 @@ class Choose:
         return self.root
 
     def write_from_xml(self, target_of_writing="News.txt"):
-        stop = 0
-        for elem in self.root.findall('publication'):
-            if stop >= self.count_of_publications:
+        for index, elem in enumerate(self.root.findall('publication')):
+            if index >= self.count_of_publications:
                 break
             else:
-                for publ in elem:
-                    if publ.text.lower() == 'news':
-                        self.content = f"News------------------\n{publ.attrib['text'].capitalize()}\n" \
-                                       f"{publ.attrib['city'].capitalize()}, {date.strftime('%d/%m/%Y %I.%M')}\n\n"
+                for publication in elem:
+                    if publication.text.lower() == 'news':
+                        self.content = f"News------------------\n{publication.attrib['text'].capitalize()}\n" \
+                                       f"{publication.attrib['city'].capitalize()}, " \
+                                       f"{date.now().strftime('%d/%m/%Y %I.%M')}\n\n"
 
-                    elif publ.text.lower() == 'ad':
-                        actual_date = datetime.datetime.strptime(publ.attrib['actual_date'], '%d/%m/%Y')
+                    elif publication.text.lower() == 'ad':
+                        actual_date = date.strptime(publication.attrib['actual_date'], '%d/%m/%Y')
                         ads_actual_date = actual_date.strftime('%d/%m/%Y')
-                        days_until = (actual_date.date() - date.date()).days
-                        self.content = f"Private Ad------------\n{publ.attrib['text'].capitalize()}\nActual until:" \
-                                       f"{ads_actual_date}, {days_until} days left\n\n"
+                        days_until = (actual_date.date() - date.now().date()).days
+                        self.content = f"Private Ad------------\n{publication.attrib['text'].capitalize()}\n" \
+                                       f"Actual until: {ads_actual_date}, {days_until} days left\n\n"
 
-                    elif publ.text.lower() == 'hello':
-                        self.content = f"Hello message---------\nFrom {publ.attrib['user_name'].capitalize()} TO " \
-                                       f"{publ.attrib['receiver_name'].capitalize()}\n" \
-                                       f"{publ.attrib['text'].capitalize()}\n\n"
+                    elif publication.text.lower() == 'hello':
+                        self.content = f"Hello message---------\nFrom {publication.attrib['user_name'].capitalize()}" \
+                                       f" TO {publication.attrib['receiver_name'].capitalize()}\n" \
+                                       f"{publication.attrib['text'].capitalize()}\n\n"
                 with open(target_of_writing, "a") as file:
                     file.write(self.content)
-                stop += 1
         os.remove(self.source_file_path)
 
     def read_from_json_file(self):
@@ -106,16 +100,16 @@ class Choose:
         for index, dictionary in enumerate(self.list_of_dict_from_json):
             if index < self.count_of_publications:
                 for key, value in dictionary.items():
-                    if key.lower() == 'type' and value.lower() == 'news':
+                    if key == 'type' and value.lower() == 'news':
                         self.content = f"News------------------\n{dictionary['text'].capitalize()}\n" \
-                                       f"{dictionary['city'].capitalize()}, {date.strftime('%d/%m/%Y %I.%M')}\n\n"
-                    elif key.lower() == 'type' and value.lower() == 'ad':
-                        actual_date = datetime.datetime.strptime(dictionary['actual_date'], '%d/%m/%Y')
+                                       f"{dictionary['city'].capitalize()}, {date.now().strftime('%d/%m/%Y %I.%M')}\n\n"
+                    elif key == 'type' and value.lower() == 'ad':
+                        actual_date = date.strptime(dictionary['actual_date'], '%d/%m/%Y')
                         ads_actual_date = actual_date.strftime('%d/%m/%Y')
-                        days_until = (actual_date.date() - date.date()).days
+                        days_until = (actual_date.date() - date.now().date()).days
                         self.content = f"Private Ad------------\n{dictionary['text'].capitalize()}\nActual until:" \
                                        f"{ads_actual_date}, {days_until} days left\n\n"
-                    elif key.lower() == 'type' and value.lower() == 'hello':
+                    elif key == 'type' and value.lower() == 'hello':
                         self.content = f"Hello message---------\nFrom {dictionary['user_name'].capitalize()} TO " \
                                        f"{dictionary['receiver_name'].capitalize()}\n" \
                                        f"{dictionary['text'].capitalize()}\n\n"
@@ -125,6 +119,15 @@ class Choose:
             else:
                 break
         os.remove(self.source_file_path)
+
+
+class Csv:
+    def __init__(self):
+        self.headers_for_common_stat_csv = ['letter', 'count_all', 'count_uppercase', 'percentage']
+        self.dict_for_word_csv = {}
+        self.dict_for_common_csv = {}
+        self.csv_name_for_word_count = 'word_count.csv'
+        self.csv_name_for_common_stats = 'common_stats.csv'
 
     def words_csv_write(self, target_of_writing="News.txt"):
         with open(target_of_writing, "r") as news_feed:
@@ -176,7 +179,7 @@ class News(Publication):
     def __init__(self):
         super().__init__()
         self.city = normalize_text(input('Enter city of news:\n'))
-        self.news_publ_date = f"{self.city}, {date.strftime('%d/%m/%Y %I.%M')}"
+        self.news_publ_date = f"{self.city}, {date.now().strftime('%d/%m/%Y %I.%M')}"
         self.content = f"News------------------\n{self.text_of_publication}\n{self.news_publ_date}\n\n"
 
 
@@ -188,7 +191,7 @@ class Ads(Publication):
         actual_day = int(input('Enter a day of chose month till that AD will be actual\n'))
         actual_date = datetime.date(actual_year, actual_month, actual_day)
         self.ads_actual_date = f"{actual_date.day}/{actual_date.month}/{actual_date.year}"
-        self.days_until = (actual_date - date.date()).days
+        self.days_until = (actual_date - date.now().date()).days
         self.content = f"Private Ad------------\n{self.text_of_publication}\nActual until:" \
                        f"{self.ads_actual_date}, {self.days_until} days left\n\n"
 
@@ -220,8 +223,8 @@ class Connection:
                                     'receiver_name text, PRIMARY KEY(text,user_name,receiver_name))')
 
     def input_insert_in_db(self, types, **kwargs):
-        self.type = types
-        if self.type.lower() == 'news':
+        type_of_publication = types
+        if type_of_publication.lower() == 'news':
             try:
                 self.cursor.execute(
                     f"INSERT INTO news VALUES ('{kwargs['text']}','{kwargs['city']}','{kwargs['date']})")
@@ -230,7 +233,7 @@ class Connection:
                 er_code = ''.join(str(error)).split(',')
                 if unique in er_code:
                     print('This row exists in DB')
-        elif self.type.lower() == 'ad':
+        elif type_of_publication.lower() == 'ad':
             try:
                 self.cursor.execute(f"INSERT INTO ads VALUES "
                                     f"('{kwargs['text']}','{kwargs['actual_date']}','{kwargs['days_until']}')")
@@ -239,7 +242,7 @@ class Connection:
                 er_code = ''.join(str(error)).split(',')
                 if unique in er_code:
                     print('This row exists in DB')
-        elif self.type.lower() == 'hello':
+        elif type_of_publication.lower() == 'hello':
             try:
                 self.cursor.execute(f"INSERT INTO hello VALUES "
                                     f"('{kwargs['text']}','{kwargs['user_name']}','{kwargs['receiver_name']}')")
@@ -320,41 +323,40 @@ while True:
             db = Connection()
             db.input_insert_in_db('news', text=new_news.text_of_publication, city=new_news.city,
                                   date=new_news.news_publ_date)
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
         elif user_choose.type_of_publication == '2':
             new_ad = Ads()
             new_ad.write_to_file()
             db = Connection()
             db.input_insert_in_db('ad', text=new_ad.text_of_publication, actual_date=new_ad.ads_actual_date,
                                   days_until=new_ad.days_until)
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
         elif user_choose.type_of_publication == '3':
             new_hello = HelloMessage()
             new_hello.write_to_file()
             db = Connection()
             db.input_insert_in_db('hello', text=new_hello.text_of_publication, user_name=new_hello.user_name,
                                   receiver_name=new_hello.receiver)
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
     elif user_choose.input_type == '2':
         if user_choose.file_type == '1':
             user_choose.read_from_txt_file()
             user_choose.write_from_txt_file()
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
-
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
         elif user_choose.file_type == '2':
             user_choose.read_from_json_file()
             user_choose.write_from_json_file()
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
         elif user_choose.file_type == '3':
             user_choose.read_from_xml_file()
             user_choose.write_from_xml()
-            user_choose.words_csv_write()
-            user_choose.common_stat_csv_write()
+            Csv().words_csv_write()
+            Csv().common_stat_csv_write()
         db = Connection()
         db.dict_for_insert_in_db()
         db.insert_publ_in_db()
