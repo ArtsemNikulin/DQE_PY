@@ -27,4 +27,3 @@ while True:
             user_choose.write_from_xml()
             processing.Processing().csv_processing()
         processing.Processing().db_processing()
-

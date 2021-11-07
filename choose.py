@@ -41,7 +41,6 @@ class Choose:
             self.source_file_path = os.path.join(self.file_path, self.source_file_name)
         elif self.input_type == '3':
             sys.exit()
-
         self.content = ''
 
     def read_from_txt_file(self):
