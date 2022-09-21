@@ -46,3 +46,9 @@ for i in sorted_list: # I declare loop to find even/odd values and to count them
 
 print('Average of even values is: ', even_sum/even_count)
 print('Average of odd values is: ', odd_sum/odd_count)
+try:
+   even_avg = even_sum / even_count
+   odd_avg = odd_sum / odd_count
+   print("Even average is", int(even_avg), "and", "Odd average is", int(odd_avg))
+except ZeroDivisionError:
+    print("Error, you are dividing by zero")
